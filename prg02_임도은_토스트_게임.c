@@ -132,7 +132,7 @@ void display() {
     printf("1: 빵 | 2: 치즈 | 3: 햄 | 4: 피클 | 5: 양배추\n");
 
     gotoxy(34, 18);
-    printf("[  @\t   *\t     ^\t      %%\t\t=   ]\n");
+    printf("[  @\t     *\t     ^\t       %%\t  =   ]\n");
 
     gotoxy(34, 20);
     printf("무엇을 올릴까?\n");
