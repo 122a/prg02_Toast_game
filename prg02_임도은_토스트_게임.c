@@ -71,17 +71,21 @@ void display() {
     //쓰레드 겹침을 막기 위함
     clean = 1;
     system("cls");
+    gotoxy(0, 5);
 
     //보드_1 화면
     for (int i = 0; i < HEIGHT; i++) {
+        printf("          ");
         for (int j = 0; j < WIDTH; j++) {
             printf("%c", board_1[i][j]);
         }
         printf("\n");
     }
 
+    gotoxy(0, 16);
     //보드_2 화면
     for (int i = 0; i < HEIGHT; i++) {
+        printf("          ");
         for (int j = 0; j < WIDTH; j++) {
             printf("%c", board_2[i][j]);
         }
@@ -89,57 +93,57 @@ void display() {
     }
 
     //대사 출력
-    gotoxy(24, 3);
+    gotoxy(34, 6);
     printf("\t<< 샌드위치 짱!! >>\n");
 
-    gotoxy(24, 4);
+    gotoxy(34, 8);
     printf("-------------------------------------\n");
 
     //주문 시 대사
     if (check == 0) {
-        gotoxy(24, 5);
+        gotoxy(34, 9);
         printf("손님:\t샌드위치 하나 주세요.\n");
 
-        gotoxy(24, 6);
+        gotoxy(34, 10);
         printf("알바:\t네, 알겠습니다!\n");
     }
 
     //틀린 주문 시 대사
     else if (check == 1) {
-        gotoxy(24, 5);
+        gotoxy(34, 9);
         printf("손님:\t제가 시킨 거랑 다르잖아요!");
 
-        gotoxy(24, 6);
+        gotoxy(34, 10);
         printf("알바:\t으악! 죄송합니다!");
     }
 
     clean = 0;
 
-    gotoxy(24, 8);
-    printf("시간: \t%d분 %02d초\n", min, second);
+    gotoxy(34, 12);
+    printf("시간:   %d분 %02d초\n", min, second);
 
-    gotoxy(24, 9);
-    printf("판매 금:%05d원\n", price);
+    gotoxy(34, 13);
+    printf("판매 금:%6d원\n", price);
 
-    gotoxy(24, 10);
+    gotoxy(34, 14);
     printf("-------------------------------------\n");
 
-    gotoxy(24, 12);
+    gotoxy(34, 16);
     printf("1: 빵 | 2: 치즈 | 3: 햄 | 4: 피클 | 5: 양배추\n");
 
-    gotoxy(24, 14);
+    gotoxy(34, 18);
     printf("[  @\t   *\t     ^\t      %%\t\t=   ]\n");
 
-    gotoxy(24, 16);
+    gotoxy(34, 20);
     printf("무엇을 올릴까?\n");
 
-    gotoxy(24, 17);
+    gotoxy(34, 21);
     printf("ANSWER: ");
 
     // 재료 입력
     if (check == 0) {
         while (1) {
-            gotoxy(24, 17);
+            gotoxy(34, 21);
             printf("ANSWER: ");
             scanf_s(" %d", &input);
 
@@ -161,16 +165,16 @@ void display() {
     }
 
     check = 0;
-    gotoxy(24, 23);
+    gotoxy(34, 27);
 
 }
 
 // 샌드위치 제출 후
 void sell() {
-    gotoxy(24, 5);
+    gotoxy(34, 9);
     printf("손님:\t와! 맛있겠다! 감사합니다.");
 
-    gotoxy(24, 6);
+    gotoxy(34, 10);
     printf("알바:\t샌드위치 나왔습니다!");
 
     price += price_e;
@@ -279,9 +283,9 @@ unsigned _stdcall Thread_A(void* arg)
         while (clean != 0) {
             Sleep(10);
         }
-        gotoxy(24, 8);
-        printf("시간: \t%d분 %02d초\n", min, second);
-        gotoxy(32, 17);
+        gotoxy(34, 12);
+        printf("시간:   %d분 %02d초\n", min, second);
+        gotoxy(42, 21);
 
         if (min == 3) {
             break;
