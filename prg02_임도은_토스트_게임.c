@@ -6,97 +6,195 @@
 #define WIDTH   18
 #define HEIGHT  10
 
-char board[HEIGHT][WIDTH];
+char board_1[HEIGHT][WIDTH];
+char board_2[HEIGHT][WIDTH];
 
-typedef struct {
-    char no1[50];
-    char no2[50];
-} TOAST;
-
-// Åä½ºÆ®_³»¿ë¹° ¼³Á¤
-int arr[5] = { "¡á", "¥Î", "¡Å", "¡ó", "¡â" };
+// í† ìŠ¤íŠ¸_ë‚´ìš©ë¬¼ ì„¤ì •
+int arr[5] = {'@', '*', '^', '%', '='};
+int input;
+int a = 0;
 
 void initialize(int, int);
+void gotoxy(int x, int y);
+void play();
+
+void gotoxy(int x, int y) { // x,y ì¢Œí‘œë¥¼ ì‚¬ìš©
+    COORD Cur;
+    Cur.X = x;
+    Cur.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
+}
 
 void initialize(int start_x, int start_y) {
-    // À§, ¾Æ·¡ °¡·Îº® 
+    // ìœ„, ì•„ë˜ ê°€ë¡œë²½ 
     for (int i = 0; i < WIDTH; i++) {
-        board[0][i] = board[HEIGHT - 1][i] = '#';
+        board_1[0][i] = board_1[HEIGHT - 1][i] = '#';
     }
 
-    // ¾ÈÂÊÀÇ °ø¹é
+    // ì•ˆìª½ì˜ ê³µë°±
     for (int i = 1; i < HEIGHT - 1; i++) {
         for (int j = 1; j < WIDTH - 1; j++) {
-            board[i][j] = ' ';
+            board_1[i][j] = ' ';
         }
     }
-    // ÁÂ, ¿ì ¼¼·Îº®
+    // ì¢Œ, ìš° ì„¸ë¡œë²½
     for (int i = 0; i < HEIGHT; i++) {
-        board[i][0] = board[i][WIDTH - 1] = '#';
+        board_1[i][0] = board_1[i][WIDTH - 1] = '#';
+    }
+
+    /////////////////////////////////////////////////
+    
+    // ìœ„, ì•„ë˜ ê°€ë¡œë²½ 
+    for (int i = 0; i < WIDTH; i++) {
+        board_2[0][i] = board_2[HEIGHT - 1][i] = '#';
+    }
+
+    // ì•ˆìª½ì˜ ê³µë°±
+    for (int i = 1; i < HEIGHT - 1; i++) {
+        for (int j = 1; j < WIDTH - 1; j++) {
+            board_2[i][j] = ' ';
+        }
+    }
+    // ì¢Œ, ìš° ì„¸ë¡œë²½
+    for (int i = 0; i < HEIGHT; i++) {
+        board_2[i][0] = board_2[i][WIDTH - 1] = '#';
     }
 }
 
-// ¼Õ´Ô È­¸é Ãâ·Â 
+// í™”ë©´ ì¶œë ¥ 
 void display() {
+    system("cls");
+    //ì˜ˆì‹œ í™”ë©´
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
-            printf("%c", board[i][j]);
+            printf("%c", board_1[i][j]);
         }
         printf("\n");
     }
+
+    //ì°¸ì—¬ í™”ë©´
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
-            printf("%c", board[i][j]);
+            printf("%c", board_2[i][j]);
         }
         printf("\n");
     }
+
+    //ëŒ€ì‚¬ ì¶œë ¥
+    gotoxy(24, 3);
+    printf("\t<< ìƒŒë“œìœ„ì¹˜ ì§±!! >>\n");
+
+    gotoxy(24, 4);
+    printf("-------------------------------------\n");
+
+    gotoxy(24, 5);
+    printf("ì†ë‹˜:\tìƒŒë“œìœ„ì¹˜ í•˜ë‚˜ ì£¼ì„¸ìš”.\n");
+
+    gotoxy(24, 6);
+    printf("ì•Œë°”:\të„¤, ì•Œê² ìŠµë‹ˆë‹¤!\n");
+
+    gotoxy(24, 8);
+    printf("ì‹œê°„: \t000\n");
+
+    gotoxy(24, 9);
+    printf("íŒë§¤ ìˆ˜:000ê°œ\n");
+
+    gotoxy(24, 10);
+    printf("-------------------------------------\n");
+
+    gotoxy(24, 12);
+    printf("1: ë¹µ | 2: ì¹˜ì¦ˆ | 3: í–„ | 4: í”¼í´ | 5: ì–‘ë°°ì¶”\n");
+
+    gotoxy(24, 14);
+    printf("[  @\t   *\t     ^\t      %%\t\t=   ]\n");
+
+    gotoxy(24, 16);
+    printf("ë¬´ì—‡ì„ ì˜¬ë¦´ê¹Œ?\n");
+
+    //ì¬ë£Œ ì…ë ¥
+    while (1)
+    {
+        gotoxy(24, 17);
+        printf("ANSWER: ");
+        scanf_s("%d", &input);
+
+        //1 ~ 5ì…ë ¥ ì‹œ
+        if (6 > input && input > 0){
+            play();
+            break;
+        }
+
+        //ì•„ì˜ˆ ë²ˆí˜¸ê°€ í‹€ë¦¬ë©´ ì¬ê°œ
+        else{
+            printf("\a");
+            continue;
+        }
+
+        //í–„ë²„ê±° ì œì¶œ ìƒê°í•´ì•¼ í•¨.
+    }
+    gotoxy(24, 23);
 }
 
-void print_toast(TOAST pf);
-
-void print_toast(TOAST pf) {
-    printf("%s\n%s\n",
-        pf.no2,
-        pf.no1);
-
-    //¾ÈÂÊ »÷µåÀ§Ä¡ ¼³Á¤
-    char inner = arr[rand() % 5];
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 8; j++) {
-            int rx = 8 - i;
-            int ry = 4 + j;
-            board[rx][ry] = inner; //¹®Á¦: »ó¼ö·Î Ãâ·ÂµÊ.
+void print_toast() {
+    //ì£¼ë¬¸ ìƒŒë“œìœ„ì¹˜ ì„¤ì •
+    int SIZE = rand() % 7;
+    for (int i = 0; i < SIZE; i++) {
+        char inner = arr[rand() % 5];
+        for (int j = 0; j < 10; j++) {
+            if (i == 0 || i == (SIZE - 1)) {
+                inner = '@';
+                board_1[8][4 + j] = inner;
+                board_1[8 - i][4 + j] = inner;
+            }
+            else {
+                if (inner == '@') {
+                    i--;
+                    continue;
+                }
+                else {
+                    int rx = 8 - i;
+                    int ry = 4 + j;
+                    board_1[rx][ry] = inner;
+                }
+            }
         }
     }
-
-
 }
+
+void play() {
+    while (1) {
+        if (board_1[8 - a][4] == ' ') {
+            break;
+        }
+        //ë²ˆí˜¸ê°€ ë§ì„ ê²½ìš°
+        else if (arr[input - 1] == board_1[8 - a][4]) {
+            for (int j = 0; j < 10; j++) {
+                board_2[8 - a][4 + j] = arr[input - 1];
+            }
+            a++;
+            display();
+            //ë‹¤ìŒ ë‹¨ê³„ë¡œ ë„˜ì–´ê°€ì•¼ í•¨.
+        }
+        //ë²ˆí˜¸ê°€ í‹€ë ¸ì„ ê²½ìš°
+        else
+            for (int j = 0; j < 10; j++) {
+                board_2[8 - a][4 + j] = arr[input - 1];
+            }
+        printf("\a");
+        display();
+        //ì´ˆê¸°í™” í•´ì•¼í•¨.
+        break;
+    }
+}
+
 
 int main(void) {
-    TOAST toast_arr[2] =
-    { "¦Å¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦Ã", "¦Ç¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦Á" };
+    printf("ìƒŒë“œìœ„ì¹˜ ê°€ê²Œì— ì˜¤ì‹  ê±¸ í™˜ì˜í•©ë‹ˆë‹¤!\n\n\n");
 
     initialize(1, 1);
+    print_toast();
+    display();
 
-    //for (int i = 0; i < 4; i++) {
-    //    printf("%s", toast_arr[i].no2);
-    //    printf("\n");
-    //}
-    for (int i = 0; i < 2; i++) {
-        print_toast(toast_arr[i]);
-    }
-
-    // ·£´ı ½ÇÇè
-    for (int i = 0; i < 10; i++) {
-        printf("%s", arr[rand() % 5]);
-    }
     printf("\n");
-
-    while (1) {
-        display();
-        Sleep(500);
-        system("cls");
-    }
-
     return 0;
 }
