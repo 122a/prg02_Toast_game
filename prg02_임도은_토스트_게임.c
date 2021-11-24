@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <stdbool.h>
 #include <limits.h>
+#include<time.h>
 
 #define WIDTH   18
 #define HEIGHT  10
@@ -260,30 +261,86 @@ void play() {
     }
 }
 
-void time() {
-    while (1) {
-        Sleep(1000);
-        second--;
-        system("cls");
-        if (second < 0) {
-            min++;
-            second = 59;
-        }
-        gotoxy(24, 8);
-        printf("시간: \t%d분 %02d초\n", min, second);
-    }
-}
+//void time() {
+//    while (1) {
+//        Sleep(1000);
+//        second--;
+//        system("cls");
+//        if (second < 0) {
+//            min++;
+//            second = 59;
+//        }
+//        gotoxy(24, 8);
+//        printf("시간: \t%d분 %02d초\n", min, second);
+//    }
+//}
 
 int main(void) {
-    printf("샌드위치 가게에 오신 걸 환영합니다!\n\n\n");
+    //시작 화면
+    for (int i = 0; i < 1; i++) {
+        gotoxy(10, 3);
+        printf("<샌드위치 짱!> 가게에 오신 걸 환영합니다!");
 
-    printf("엔터 키 입력 시 시작합니다!");
-    getchar();
+        gotoxy(10, 5);
+        printf("-----------------------------------------\n");
+
+        gotoxy(10, 7);
+        printf("[ 게임 방법 ]");
+
+        gotoxy(10, 9);
+        printf("#############\n");
+        printf("          #           #\n");
+        printf("          #  @@@@@@@  #\n");
+        printf("          #  *******  #\n");
+        printf("          #  =======  #\n");
+        printf("          #  @@@@@@@  #\n");
+        printf("          #############\n");
+
+        gotoxy(10, 17);
+        printf("#############\n");
+        for (int i = 0; i < 4; i++) {
+            printf("          #           #\n");
+        }
+        printf("          #  @@@@@@@  #\n");
+        printf("          #############\n");
+
+        gotoxy(26, 9);
+        printf("첫 번째 보드: 손님 칸");
+        gotoxy(26, 10);
+        printf("-------------------------\n");
+        gotoxy(26, 11);
+        printf("위쪽의 보드에서 손님이 주문하신 샌드위치가 나타난다.");
+        gotoxy(26, 12);
+        printf("플레이어는 위쪽의 보드와 똑같이 샌드위치를 쌓아 올린다.");
+        gotoxy(26, 13);
+        printf("빵은 800원! 다른 재료는 1000원으로 계산!");
+
+        gotoxy(26, 17);
+        printf("두 번째 보드: 플레이어 칸");
+        gotoxy(26, 18);
+        printf("-------------------------\n");
+        gotoxy(26, 19);
+        printf("1: 빵 | 2: 치즈 | 3: 햄 | 4: 피클 | 5: 양배추\n");
+
+        gotoxy(26, 20);
+        printf("[   @\t     *\t      ^\t       %%\t  =   ]\n");
+
+        gotoxy(26, 22);
+        printf("무엇을 올릴까?    ANSWER 칸에 위 모양을");
+        gotoxy(26, 23);
+        printf("ANSWER: Ex)1   <= 가리키는 숫자를 입력 후 Enter!");
+        gotoxy(26, 25);
+        printf("샌드위치 완료 시 0을 입력 후 Enter하면 제출!");
+
+        gotoxy(10, 28);
+        printf("Enter 키 입력 시 시작합니다!");
+        getchar();
+    }
 
     initialize(1, 1);
     print_toast();
     display();
-    time();
+    //time();
     printf("\n");
     return 0;
 }
