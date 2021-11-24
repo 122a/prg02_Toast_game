@@ -29,6 +29,10 @@ void gotoxy(int x, int y) {
     Cur.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
 }
+// color 입힘
+void setcolor(unsigned short text, unsigned short back) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), text | (back << 4));
+}
 
 void initialize(int start_x, int start_y) {
     /*첫 번째 보드*/
@@ -77,7 +81,25 @@ void display() {
     for (int i = 0; i < HEIGHT; i++) {
         printf("          ");
         for (int j = 0; j < WIDTH; j++) {
+            switch (board_1[i][j]) {
+            case '@':
+                setcolor(14, 0);
+                break;
+            case '*':
+                setcolor(6, 0);
+                break;
+            case '^':
+                setcolor(12, 0);
+                break;
+            case '%':
+                setcolor(2, 0);
+                break;
+            case '=':
+                setcolor(5, 0);
+                break;
+            }
             printf("%c", board_1[i][j]);
+            setcolor(15, 0);
         }
         printf("\n");
     }
@@ -87,7 +109,25 @@ void display() {
     for (int i = 0; i < HEIGHT; i++) {
         printf("          ");
         for (int j = 0; j < WIDTH; j++) {
+            switch (board_2[i][j]) {
+            case '@':
+                setcolor(14, 0);
+                break;
+            case '*':
+                setcolor(6, 0);
+                break;
+            case '^':
+                setcolor(12, 0);
+                break;
+            case '%':
+                setcolor(2, 0);
+                break;
+            case '=':
+                setcolor(5, 0);
+                break;
+            }
             printf("%c", board_2[i][j]);
+            setcolor(15, 0);
         }
         printf("\n");
     }
@@ -163,10 +203,8 @@ void display() {
             }
         }
     }
-
     check = 0;
     gotoxy(34, 27);
-
 }
 
 // 샌드위치 제출 후
@@ -185,7 +223,8 @@ void sell() {
     count++;
     initialize(1, 1);
     print_toast();
-    price_e, a = 0;
+    price_e = 0;
+    a = 0;
     display();
 }
 
@@ -332,10 +371,8 @@ int main(void) {
     for (int i = 0; i < 1; i++) {
         gotoxy(10, 3);
         printf("<샌드위치 짱!> 가게에 오신 걸 환영합니다!");
-
         gotoxy(10, 5);
         printf("-----------------------------------------\n");
-
         gotoxy(10, 7);
         printf("[ 게임 방법 ]");
 
@@ -375,17 +412,14 @@ int main(void) {
         printf("-------------------------\n");
         gotoxy(26, 19);
         printf("1: 빵 | 2: 치즈 | 3: 햄 | 4: 피클 | 5: 양배추\n");
-
         gotoxy(26, 20);
         printf("[  @\t     *\t      ^\t       %%\t  =   ]\n");
-
         gotoxy(26, 22);
         printf("무엇을 올릴까?    ANSWER 칸에 위 모양을");
         gotoxy(26, 23);
         printf("ANSWER: Ex)1   <= 가리키는 숫자를 입력 후 Enter!");
         gotoxy(26, 25);
         printf("샌드위치 완료 시 0을 입력 후 Enter하면 제출!");
-
         gotoxy(10, 28);
         printf("Enter 키 입력 시 시작합니다!");
         getchar();
