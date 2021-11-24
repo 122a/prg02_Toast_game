@@ -14,9 +14,8 @@ char board_2[HEIGHT][WIDTH];
 
 int arr[5] = { '@', '*', '^', '%', '=' };
 int input;
-int second = 0;
-int a, check, count, min = 0;
-int price, price_e, clean = 0;
+int a, check, count, min, price,
+    price_e, clean, second = 0;
 
 void initialize(int, int);
 void gotoxy(int x, int y);
@@ -122,9 +121,6 @@ void display() {
     gotoxy(24, 9);
     printf("판매 금:%05d원\n", price);
 
-    //gotoxy(24, 9);
-    //printf("판매 수:%03d개\n", count);
-
     gotoxy(24, 10);
     printf("-------------------------------------\n");
 
@@ -140,23 +136,23 @@ void display() {
     gotoxy(24, 17);
     printf("ANSWER: ");
 
-    //재료 입력
+    // 재료 입력
     if (check == 0) {
         while (1) {
             gotoxy(24, 17);
             printf("ANSWER: ");
             scanf_s(" %d", &input);
 
-            //1 ~ 5입력 시
+            // 1 ~ 5입력 시
             if (6 > input && input > 0) {
                 play();
                 break;
             }
-            //샌드위치 제출
+            // 샌드위치 제출
             else if (input == 0) {
                 play();
             }
-            //아예 번호가 틀리면 재개
+            // 아예 번호가 틀리면 재개
             else {
                 printf("\a");
                 continue;
@@ -169,6 +165,7 @@ void display() {
 
 }
 
+// 샌드위치 제출 후
 void sell() {
     gotoxy(24, 5);
     printf("손님:\t와! 맛있겠다! 감사합니다.");
@@ -180,7 +177,7 @@ void sell() {
     Beep(_F, 100);
     Sleep(200);
     Beep(_B, 100);
-    Sleep(1800);
+    Sleep(2500);
     count++;
     initialize(1, 1);
     print_toast();
@@ -188,9 +185,9 @@ void sell() {
     display();
 }
 
-//주문 샌드위치 설정
+// 주문 샌드위치 설정
 void print_toast() {
-    //샌드위치 높이 설정
+    // 샌드위치 높이 설정
     int SIZE = rand() % 7;
 
     switch (SIZE) {
@@ -229,7 +226,7 @@ void play() {
         if (board_1[8 - a][4] == ' ' && input == 0) {
             sell();
         }
-        //번호가 맞을 경우
+        // 번호가 맞을 경우
         else if (arr[input - 1] == board_1[8 - a][4]) {
             for (int j = 0; j < 10; j++) {
                 board_2[8 - a][4 + j] = arr[input - 1];
@@ -242,9 +239,8 @@ void play() {
 
             a++;
             display();
-            //다음 단계로 넘어가야 함.
         }
-        //번호가 틀렸을 경우
+        // 번호가 틀렸을 경우
         else {
             if (input == 0) {
                 for (int j = 0; j < 10; j++) {
@@ -260,7 +256,7 @@ void play() {
             printf("\a");
             check = 1;
             display();
-            Sleep(1800);
+            Sleep(2500);
             initialize(1, 1);
             print_toast();
             a = 0;
@@ -269,6 +265,7 @@ void play() {
     }
 }
 
+// 타이머
 unsigned _stdcall Thread_A(void* arg)
 {
     while (1)
@@ -292,7 +289,7 @@ unsigned _stdcall Thread_A(void* arg)
     }
     system("cls");
 
-    //결과 화면
+    // 결과 화면
     for (int i = 0; i < 1; i++) {
         gotoxy(10, 3);
         printf("\t<샌드위치 짱!> 아르바이트 끝!");
@@ -327,7 +324,7 @@ unsigned _stdcall Thread_A(void* arg)
 }
 
 int main(void) {
-    //시작 화면
+    // 시작 화면
     for (int i = 0; i < 1; i++) {
         gotoxy(10, 3);
         printf("<샌드위치 짱!> 가게에 오신 걸 환영합니다!");
@@ -390,6 +387,7 @@ int main(void) {
         getchar();
     }
 
+    // 타이머 실행
     _beginthreadex(NULL, 0, Thread_A, 0, 0, NULL);
 
     initialize(1, 1);
