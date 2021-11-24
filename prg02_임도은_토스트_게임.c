@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <Windows.h>
+#include <stdlib.h>
 #include <stdbool.h>
-#include <limits.h>
-#include<time.h>
+#include <Windows.h>
+#include <process.h>
 
 #define WIDTH   18
 #define HEIGHT  10
@@ -12,11 +12,11 @@
 char board_1[HEIGHT][WIDTH];
 char board_2[HEIGHT][WIDTH];
 
-int arr[5] = {'@', '*', '^', '%', '='};
+int arr[5] = { '@', '*', '^', '%', '=' };
 int input;
-int second = 60;
+int second = 0;
 int a, check, count, min = 0;
-int price, price_e = 0;
+int price, price_e, clean = 0;
 
 void initialize(int, int);
 void gotoxy(int x, int y);
@@ -69,7 +69,10 @@ void initialize(int start_x, int start_y) {
 
 // 화면 출력 
 void display() {
+    //쓰레드 겹침을 막기 위함
+    clean = 1;
     system("cls");
+
     //보드_1 화면
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
@@ -111,8 +114,10 @@ void display() {
         printf("알바:\t으악! 죄송합니다!");
     }
 
+    clean = 0;
+
     gotoxy(24, 8);
-    printf("시간: \t%d분 %02d\n", min, second);
+    printf("시간: \t%d분 %02d초\n", min, second);
 
     gotoxy(24, 9);
     printf("판매 금:%05d원\n", price);
@@ -131,6 +136,9 @@ void display() {
 
     gotoxy(24, 16);
     printf("무엇을 올릴까?\n");
+
+    gotoxy(24, 17);
+    printf("ANSWER: ");
 
     //재료 입력
     if (check == 0) {
@@ -218,7 +226,7 @@ void print_toast() {
 
 void play() {
     while (1) {
-        if (board_1[8 - a][4] == ' ') {
+        if (board_1[8 - a][4] == ' ' && input == 0) {
             sell();
         }
         //번호가 맞을 경우
@@ -261,19 +269,62 @@ void play() {
     }
 }
 
-//void time() {
-//    while (1) {
-//        Sleep(1000);
-//        second--;
-//        system("cls");
-//        if (second < 0) {
-//            min++;
-//            second = 59;
-//        }
-//        gotoxy(24, 8);
-//        printf("시간: \t%d분 %02d초\n", min, second);
-//    }
-//}
+unsigned _stdcall Thread_A(void* arg)
+{
+    while (1)
+    {
+        Sleep(1000);
+        second++;
+        if (second == 60) {
+            min++;
+            second = 0;
+        }
+        while (clean != 0) {
+            Sleep(10);
+        }
+        gotoxy(24, 8);
+        printf("시간: \t%d분 %02d초\n", min, second);
+        gotoxy(32, 17);
+
+        if (min == 3) {
+            break;
+        }
+    }
+    system("cls");
+
+    //결과 화면
+    for (int i = 0; i < 1; i++) {
+        gotoxy(10, 3);
+        printf("\t<샌드위치 짱!> 아르바이트 끝!");
+
+        gotoxy(10, 5);
+        printf("-----------------------------------------\n");
+
+        gotoxy(10, 7);
+        printf("[ 게임 오버 ]");
+
+        gotoxy(10, 9);
+        printf("#############\n");
+        printf("          #           #\n");
+        printf("          #  @@@@@@@  #\n");
+        printf("          #  *******  #\n");
+        printf("          #  =======  #\n");
+        printf("          #  @@@@@@@  #\n");
+        printf("          #############\n");
+
+        gotoxy(26, 9);
+        printf(":: 결과물 ::");
+        gotoxy(26, 10);
+        printf("-------------------------\n");
+        gotoxy(26, 11);
+        printf("총 판매 개수: %d개",count);
+        gotoxy(26, 12);
+        printf("총 판매 금액: %d원", price);
+        gotoxy(26, 14);
+        printf("완전 힘든 하루였다!!\n\n\n");
+    }
+    exit(0);
+}
 
 int main(void) {
     //시작 화면
@@ -313,6 +364,8 @@ int main(void) {
         gotoxy(26, 12);
         printf("플레이어는 위쪽의 보드와 똑같이 샌드위치를 쌓아 올린다.");
         gotoxy(26, 13);
+        printf("3분 안으로 최대한 많이 만들어 파는 게 목적!");
+        gotoxy(26, 14);
         printf("빵은 800원! 다른 재료는 1000원으로 계산!");
 
         gotoxy(26, 17);
@@ -323,7 +376,7 @@ int main(void) {
         printf("1: 빵 | 2: 치즈 | 3: 햄 | 4: 피클 | 5: 양배추\n");
 
         gotoxy(26, 20);
-        printf("[   @\t     *\t      ^\t       %%\t  =   ]\n");
+        printf("[  @\t     *\t      ^\t       %%\t  =   ]\n");
 
         gotoxy(26, 22);
         printf("무엇을 올릴까?    ANSWER 칸에 위 모양을");
@@ -337,10 +390,10 @@ int main(void) {
         getchar();
     }
 
+    _beginthreadex(NULL, 0, Thread_A, 0, 0, NULL);
+
     initialize(1, 1);
     print_toast();
     display();
-    //time();
-    printf("\n");
     return 0;
 }
