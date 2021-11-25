@@ -216,11 +216,11 @@ void sell() {
     printf("알바:\t샌드위치 나왔습니다!");
 
     price += price_e;
+    count++;
     Beep(_F, 100);
     Sleep(200);
     Beep(_B, 100);
     Sleep(2500);
-    count++;
     initialize(1, 1);
     print_toast();
     price_e = 0;
@@ -414,13 +414,13 @@ int main(void) {
         printf("1: 빵 | 2: 치즈 | 3: 햄 | 4: 피클 | 5: 양배추\n");
         gotoxy(26, 20);
         printf("[  @\t     *\t      ^\t       %%\t  =   ]\n");
-        gotoxy(26, 22);
+        gotoxy(26, 21);
         printf("무엇을 올릴까?    ANSWER 칸에 위 모양을");
-        gotoxy(26, 23);
+        gotoxy(26, 22);
         printf("ANSWER: Ex)1   <= 가리키는 숫자를 입력 후 Enter!");
-        gotoxy(26, 25);
+        gotoxy(26, 23);
         printf("샌드위치 완료 시 0을 입력 후 Enter하면 제출!");
-        gotoxy(10, 28);
+        gotoxy(10, 25);
         printf("Enter 키 입력 시 시작합니다!");
         getchar();
     }
